@@ -95,3 +95,17 @@ services:
       - ./api-gateway:/usr/src/api-gateway
     networks:
       - default
+
+  chat-app:
+    build: ./chat-app/
+    container_name: "chat-app"
+    ports:
+      - "7001:7001"
+    depends_on:
+      - "api-gateway"
+    links:
+      - api-gateway
+    volumes:
+      - ./chat-app:/usr/src/chat-app
+    networks:
+      - default
