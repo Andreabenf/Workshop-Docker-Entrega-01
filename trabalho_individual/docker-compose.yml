@@ -27,7 +27,7 @@ services:
       - ./dump:/docker-entrypoint-initdb.d
     networks:
       - default
-      
+
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
@@ -45,3 +45,20 @@ services:
       MYSQL_ROOT_PASSWORD: test
     volumes:
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+
+  chat-service:
+    build: ./chat-service/
+    container_name: "chat-service"
+    environment:
+      USERS_SERVICE_DB_URL: mysql://root:password@chat-service-db/db
+      USER_SESSION_EXPIRY_HOURS: 1
+    ports:
+      - "7100:7100"
+    depends_on:
+      - "chat-service-db"
+    links:
+      - chat-service-db
+    volumes:
+      - ./chat-service:/usr/src/chat-service
+    networks:
+      - default
