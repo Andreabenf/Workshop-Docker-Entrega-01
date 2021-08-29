@@ -79,3 +79,19 @@ services:
       - ./users-service:/usr/src/users-service
     networks:
       - default
+
+  api-gateway:
+    build: ./api-gateway/
+    container_name: "api-gateway"
+    ports:
+      - "7000:7000"
+    depends_on:
+      - "users-service"
+      - "chat-service"
+    links:
+      - users-service
+      - chat-service
+    volumes:
+      - ./api-gateway:/usr/src/api-gateway
+    networks:
+      - default
