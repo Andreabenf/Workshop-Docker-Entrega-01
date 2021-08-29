@@ -27,3 +27,21 @@ services:
       - ./dump:/docker-entrypoint-initdb.d
     networks:
       - default
+      
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 7300:80
+    depends_on:
+      - "chat-service-db"
+      - "users-service-db"
+    links:
+      - users-service-db
+      - chat-service-db
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
